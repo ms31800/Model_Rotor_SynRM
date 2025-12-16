@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>SynRM – axes d/q auto + flux + couple (v3)</title>
+  <style>
+    :root{
+      color-scheme: dark;
+      --bg:#0b0c10; --panel:#12141b; --text:#e8e8ea; --muted:#a7a7ad;
+      --grid:#232736;
+    }
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);}
+    .wrap{display:grid;grid-template-columns:1fr 320px;gap:12px;padding:12px;}
+    canvas{width:100%;height:calc(100vh - 24px);background:radial-gradient(1200px 900px at 50% 30%, #101423, #07080c);
+      border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.45);}
+    .panel{background:var(--panel);border:1px solid #1b1f2d;border-radius:16px;padding:12px;height:calc(100vh - 24px);
+      overflow:auto;box-shadow:0 8px 30px rgba(0,0,0,.25);}
+    h1{font-size:16px;margin:0 0 10px;}
+    .row{margin:10px 0;}
+    label{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted);}
+    input[type="range"]{width:100%;}
+    .tog{display:flex;gap:10px;flex-wrap:wrap;}
+    .tog label{justify-content:flex-start;gap:8px;color:var(--text);font-size:12px;}
+    .pill{font-size:12px;padding:6px 8px;border-radius:999px;background:#0f1220;border:1px solid #1b1f2d;color:var(--muted);}
+    .kpi{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+    .card{background:#0f1220;border:1px solid #1b1f2d;border-radius:14px;padding:10px;}
+    .card .t{font-size:11px;color:var(--muted);margin-bottom:6px;}
+    .card .v{font-size:18px;font-variant-numeric:tabular-nums;}
+    .btns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+    button{background:#0f1220;border:1px solid #1b1f2d;color:var(--text);padding:8px 10px;border-radius:12px;cursor:pointer;}
+    button:hover{border-color:#2a3150;}
+    .small{font-size:12px;color:var(--muted);line-height:1.35;}
+    .warn{color:#ffd38a;}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <canvas id="c" width="1100" height="1100"></canvas>
+  <div class="panel">
+    <h1>SynRM – axes d/q auto + flux + couple (v3)</h1>
+    <div class="row small">
+      Rotor: <span class="pill">synRM_rotor.svg</span><br/>
+      Raccourcis: <span class="pill">Espace</span> play/pause · <span class="pill">R</span> reset
+    </div>
+
+    <div class="row">
+      <div class="tog">
+        <label><input id="showAxes" type="checkbox" checked/>Axes d/q</label>
+        <label><input id="showFlux" type="checkbox" checked/>Flux</label>
+        <label><input id="showField" type="checkbox" checked/>Champ</label>
+        <label><input id="showHud" type="checkbox" checked/>HUD</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <label><span>Vitesse champ</span><span id="spFieldV">1.00×</span></label>
+      <input id="spField" type="range" min="0" max="3" step="0.01" value="1"/>
+    </div>
+
+    <div class="row">
+      <label><span>Gain d’alignement</span><span id="kAlignV">1.20</span></label>
+      <input id="kAlign" type="range" min="0" max="3" step="0.01" value="1.2"/>
+    </div>
+
+    <div class="row">
+      <label><span>Anisotropie (≈ Ld/Lq)</span><span id="anisV">1.60</span></label>
+      <input id="anis" type="range" min="1" max="3" step="0.01" value="1.6"/>
+    </div>
+
+    <div class="row">
+      <label><span>Offset axe d (fine)</span><span id="dOffV">0.0°</span></label>
+      <input id="dOff" type="range" min="-30" max="30" step="0.1" value="0"/>
+    </div>
+
+    <div class="row">
+      <div class="tog">
+        <label><input id="swapDQ" type="checkbox"/>Inverser d/q</label>
+        <label><input id="lockSync" type="checkbox" checked/>Mode synchrone</label>
+      </div>
+      <div class="small">L’auto-détection fixe l’axe d “physique”. L’offset sert juste au micro-calage.</div>
+    </div>
+
+    <div class="kpi">
+      <div class="card"><div class="t">Axe d détecté</div><div class="v" id="dDetected">…</div></div>
+      <div class="card"><div class="t">Angle δ</div><div class="v"><span id="deltaV">…</span></div></div>
+      <div class="card"><div class="t">Couple (modèle)</div><div class="v"><span id="torqueV">…</span></div></div>
+      <div class="card"><div class="t">État</div><div class="v" id="stateV">Chargement…</div></div>
+    </div>
+
+    <div class="btns">
+      <button id="btnAuto">Recalculer axe d</button>
+      <button id="btnReset">Reset</button>
+      <button id="btnPause">Pause</button>
+    </div>
+
+    <div class="row small">
+      <div class="warn">Note :</div>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const el = (id)=>document.getElementById(id);
+  const ui = {
+    spField: el('spField'), spFieldV: el('spFieldV'),
+    kAlign: el('kAlign'), kAlignV: el('kAlignV'),
+    anis: el('anis'), anisV: el('anisV'),
+    dOff: el('dOff'), dOffV: el('dOffV'),
+    showAxes: el('showAxes'),
+    showFlux: el('showFlux'),
+    showField: el('showField'),
+    showHud: el('showHud'),
+    swapDQ: el('swapDQ'),
+    lockSync: el('lockSync'),
+    dDetected: el('dDetected'),
+    deltaV: el('deltaV'),
+    torqueV: el('torqueV'),
+    stateV: el('stateV'),
+    btnAuto: el('btnAuto'),
+    btnReset: el('btnReset'),
+    btnPause: el('btnPause'),
+  };
+
+  const TAU = Math.PI*2;
+
+  function fmtDeg(rad){
+    let d = rad * 180/Math.PI;
+    d = ((d % 360) + 360) % 360;
+    return d.toFixed(1) + '°';
+  }
+  function clamp(x,a,b){ return Math.max(a, Math.min(b,x)); }
+  function wrapPi(a){
+    a = (a + Math.PI) % (2*Math.PI);
+    if (a <= 0) a += 2*Math.PI;
+    return a - Math.PI;
+  }
+  function principalAngle(cxx, cxy, cyy){
+    return 0.5 * Math.atan2(2*cxy, cxx - cyy);
+  }
+  function pcaAngleFromMask(imgData, w, h, predicate){
+    const data = imgData.data;
+    let sx=0, sy=0, n=0;
+    for (let y=0; y<h; y++){
+      for (let x=0; x<w; x++){
+        const i = 4*(y*w + x);
+        const r=data[i], g=data[i+1], b=data[i+2], a=data[i+3];
+        if (!predicate(r,g,b,a)) continue;
+        sx += x; sy += y; n++;
+      }
+    }
+    if (n < 200) return null;
+    const mx = sx/n, my = sy/n;
+    let cxx=0, cxy=0, cyy=0;
+    for (let y=0; y<h; y++){
+      for (let x=0; x<w; x++){
+        const i = 4*(y*w + x);
+        const r=data[i], g=data[i+1], b=data[i+2], a=data[i+3];
+        if (!predicate(r,g,b,a)) continue;
+        const dx = x-mx, dy = y-my;
+        cxx += dx*dx; cxy += dx*dy; cyy += dy*dy;
+      }
+    }
+    cxx/=n; cxy/=n; cyy/=n;
+    const ang = principalAngle(cxx,cxy,cyy);
+    return {angle: ang, n};
+  }
+
+  // Load SVG as image
+  const rotorImg = new Image();
+  rotorImg.onload = () => {
+    ui.stateV.textContent = 'Détection axe d…';
+    autoDetectAxisD();
+    start();
+  };
+  rotorImg.onerror = () => { ui.stateV.textContent = 'Erreur: SVG introuvable.'; };
+  rotorImg.src = 'synRM_rotor.svg';
+
+  // Hidden canvas to rasterize SVG for analysis
+  const hc = document.createElement('canvas');
+  const hctx = hc.getContext('2d');
+
+  let axisD0 = 0; // detected base axis-d (rad), modulo pi
+  let running = true;
+
+  function autoDetectAxisD(){
+    const W = 720, H = 720;
+    hc.width = W; hc.height = H;
+    hctx.clearRect(0,0,W,H);
+    const s = Math.min(W/rotorImg.width, H/rotorImg.height) * 0.92;
+    const dw = rotorImg.width*s, dh = rotorImg.height*s;
+    const ox = (W-dw)/2, oy = (H-dh)/2;
+    hctx.drawImage(rotorImg, ox, oy, dw, dh);
+    const img = hctx.getImageData(0,0,W,H);
+
+    const bright = (r,g,b)=> (r+g+b)/3;
+    const isOpaque = (r,g,b,a)=> a>20;
+    const isBarrier = (r,g,b,a)=> isOpaque(r,g,b,a) && bright(r,g,b) > 240; // white-ish
+    const isIron = (r,g,b,a)=> isOpaque(r,g,b,a) && bright(r,g,b) < 90;      // dark-ish
+
+    const pBarrier = pcaAngleFromMask(img, W, H, isBarrier);
+    const pIron = pcaAngleFromMask(img, W, H, isIron);
+
+    let dCand = 0;
+    let reason = '';
+    if (pIron && pIron.n > 500){
+      dCand = pIron.angle;
+      reason = 'fer (n=' + pIron.n + ')';
+    } else if (pBarrier){
+      dCand = pBarrier.angle + Math.PI/2;
+      reason = 'barrières+90° (n=' + pBarrier.n + ')';
+    } else {
+      dCand = Math.PI/4;
+      reason = 'fallback 45°';
+    }
+
+    dCand = ((dCand % Math.PI) + Math.PI) % Math.PI; // axis periodicity
+    axisD0 = dCand;
+    ui.dDetected.textContent = fmtDeg(axisD0) + ' (' + reason + ')';
+    ui.stateV.textContent = 'OK';
+  }
+
+  // Simulation state
+  let tPrev = performance.now();
+  let thetaField = 0;
+  let thetaRotor = 0;
+  let torque = 0;
+  let omegaBase = 1.2;
+
+  function reset(){
+    thetaField = 0;
+    thetaRotor = 0;
+    torque = 0;
+  }
+
+  function syncUi(){
+    ui.spFieldV.textContent = Number(ui.spField.value).toFixed(2) + '×';
+    ui.kAlignV.textContent = Number(ui.kAlign.value).toFixed(2);
+    ui.anisV.textContent = Number(ui.anis.value).toFixed(2);
+    ui.dOffV.textContent = Number(ui.dOff.value).toFixed(1) + '°';
+  }
+  ['input','change'].forEach(evt=>{
+    ui.spField.addEventListener(evt, syncUi);
+    ui.kAlign.addEventListener(evt, syncUi);
+    ui.anis.addEventListener(evt, syncUi);
+    ui.dOff.addEventListener(evt, syncUi);
+  });
+  syncUi();
+
+  ui.btnAuto.onclick = () => autoDetectAxisD();
+  ui.btnReset.onclick = () => reset();
+  ui.btnPause.onclick = () => {
+    running = !running;
+    ui.btnPause.textContent = running ? 'Pause' : 'Play';
+  };
+
+  window.addEventListener('keydown', (e)=>{
+    if (e.code === 'Space'){
+      e.preventDefault();
+      running = !running;
+      ui.btnPause.textContent = running ? 'Pause' : 'Play';
+    }
+    if (e.key.toLowerCase() === 'r') reset();
+  });
+
+  function drawGrid(cx, cy, R){
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for (let k=1; k<=4; k++){
+      ctx.beginPath();
+      ctx.arc(0,0, R*k/4, 0, TAU);
+      ctx.stroke();
+    }
+    ctx.beginPath(); ctx.moveTo(-R,0); ctx.lineTo(R,0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,-R); ctx.lineTo(0,R); ctx.stroke();
+    ctx.restore();
+  }
+
+  function arrow(x0,y0,x1,y1,width,color){
+    const dx=x1-x0, dy=y1-y0;
+    const L=Math.hypot(dx,dy) || 1;
+    const ux=dx/L, uy=dy/L;
+    const hx=-uy, hy=ux;
+    const head=clamp(width*3.0, 10, 26);
+    ctx.strokeStyle=color;
+    ctx.fillStyle=color;
+    ctx.lineWidth=width;
+    ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x1,y1);
+    ctx.lineTo(x1 - ux*head + hx*head*0.55, y1 - uy*head + hy*head*0.55);
+    ctx.lineTo(x1 - ux*head - hx*head*0.55, y1 - uy*head - hy*head*0.55);
+    ctx.closePath(); ctx.fill();
+  }
+
+  function drawRotor(cx, cy, R, theta){
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(theta);
+    const s = (2*R) / Math.max(rotorImg.width, rotorImg.height);
+    ctx.scale(s, s);
+    ctx.drawImage(rotorImg, -rotorImg.width/2, -rotorImg.height/2);
+    ctx.restore();
+  }
+
+  function drawAxes(cx, cy, R, axisD, axisQ){
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.globalAlpha = 0.95;
+
+    const dL = R*0.95, qL = R*0.85;
+
+    arrow(0,0, Math.cos(axisD)*dL, Math.sin(axisD)*dL, 4, 'rgba(66,212,106,0.95)');
+    arrow(0,0, Math.cos(axisQ)*qL, Math.sin(axisQ)*qL, 4, 'rgba(255,90,106,0.95)');
+
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.font = '16px ui-sans-serif, system-ui';
+    ctx.fillText('d', Math.cos(axisD)*dL + 10, Math.sin(axisD)*dL + 6);
+    ctx.fillText('q', Math.cos(axisQ)*qL + 10, Math.sin(axisQ)*qL + 6);
+
+    ctx.restore();
+  }
+
+  function drawFlux(cx, cy, R, axisD, thetaField){
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.globalAlpha = 0.55;
+
+    const N = 22;
+    for (let k=0; k<N; k++){
+      const a0 = (k/N)*TAU;
+      const da = wrapPi(a0 - axisD);
+      const bias = 0.55 * Math.sin(2*da);
+      let ang = a0 - bias;
+
+      const steps = 42;
+      let r = R*0.15;
+
+      ctx.beginPath();
+      for (let i=0; i<steps; i++){
+        const wField = 0.55;
+        const wEasy  = 0.85;
+        const dirA = Math.atan2(
+          wField*Math.sin(thetaField) + wEasy*Math.sin(axisD),
+          wField*Math.cos(thetaField) + wEasy*Math.cos(axisD)
+        );
+        // steer toward dirA smoothly
+        ang += 0.08 * wrapPi(dirA - ang);
+
+        // barrier repulsion around axisQ
+        const dq = wrapPi(ang - (axisD + Math.PI/2));
+        ang += 0.020 * Math.sin(2*dq);
+
+        const x = Math.cos(ang)*r;
+        const y = Math.sin(ang)*r;
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        r += (R*0.80)/steps;
+      }
+      ctx.strokeStyle = 'rgba(170,200,255,0.35)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawTorqueGauge(){
+    ctx.save();
+    const x=30, y=30, w=240, h=18;
+    ctx.globalAlpha = 0.9;
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.fillRect(x,y,w,h);
+    const t = clamp((torque+1)/2, 0, 1);
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    ctx.fillRect(x,y,w*t,h);
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+    ctx.strokeRect(x,y,w,h);
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.font = '14px ui-sans-serif, system-ui';
+    ctx.fillText('Couple (modèle)', x, y+h+18);
+    ctx.restore();
+  }
+
+  function step(now){
+    const dt = Math.min(0.03, (now - tPrev)/1000);
+    tPrev = now;
+
+    if (running){
+      const sp = Number(ui.spField.value);
+      const kA = Number(ui.kAlign.value);
+      const anis = Number(ui.anis.value);
+
+      thetaField += omegaBase * sp * dt;
+
+      const dOff = Number(ui.dOff.value) * Math.PI/180;
+
+      let axisD = thetaRotor + axisD0 + dOff;
+      let axisQ = axisD + Math.PI/2;
+      if (ui.swapDQ.checked){
+        const tmp = axisD; axisD = axisQ; axisQ = tmp;
+      }
+
+      const delta = wrapPi(thetaField - axisD);
+      torque = clamp((anis-1) * 0.85 * Math.sin(2*delta), -1, 1);
+
+      const align = kA * (anis-1) * Math.sin(2*delta);
+
+      if (ui.lockSync.checked){
+        thetaRotor += (omegaBase * sp) * dt;
+        thetaRotor += (-0.35 * align) * dt;
+      } else {
+        thetaRotor += (align) * dt;
+      }
+
+      ui.deltaV.textContent = fmtDeg(delta);
+      ui.torqueV.textContent = torque.toFixed(2);
+    }
+
+    render();
+    requestAnimationFrame(step);
+  }
+
+  function render(){
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0,0,W,H);
+
+    const cx = W/2, cy = H/2;
+    const R = Math.min(W,H)*0.36;
+
+    drawGrid(cx, cy, R*1.25);
+
+    const dOff = Number(ui.dOff.value) * Math.PI/180;
+    let axisD = thetaRotor + axisD0 + dOff;
+    let axisQ = axisD + Math.PI/2;
+    if (ui.swapDQ.checked){
+      const tmp=axisD; axisD=axisQ; axisQ=tmp;
+    }
+
+    if (ui.showFlux.checked) drawFlux(cx, cy, R*1.15, axisD, thetaField);
+
+    if (ui.showField.checked){
+      const L = R*1.10;
+      const x1 = cx + Math.cos(thetaField)*L;
+      const y1 = cy + Math.sin(thetaField)*L;
+      arrow(cx,cy,x1,y1,5,'rgba(74,163,255,0.95)');
+      ctx.save();
+      ctx.fillStyle='rgba(255,255,255,0.85)';
+      ctx.font='16px ui-sans-serif, system-ui';
+      ctx.fillText('B', x1+10, y1+6);
+      ctx.restore();
+    }
+
+    drawRotor(cx, cy, R*0.92, thetaRotor);
+
+    if (ui.showAxes.checked) drawAxes(cx, cy, R*0.95, axisD, axisQ);
+    if (ui.showHud.checked) drawTorqueGauge();
+  }
+
+  function start(){
+    ui.stateV.textContent = 'En marche';
+    requestAnimationFrame(step);
+  }
+})();
+</script>
+</body>
+</html>
