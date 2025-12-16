@@ -5,8 +5,6 @@ Ce dépôt propose un **ensemble d’animations interactives** dédiées à la c
 L’objectif est de fournir un **support visuel rigoureux**, utilisable aussi bien en **enseignement**, en **auto-formation**, qu’en **ingénierie de conception / commande**.
 
 
-## ✨ Contenu du dépôt
-
 ### Animation du rotor SynRM – axes d/q, flux et couple
 Animation interactive montrant :
 
