@@ -65,10 +65,5 @@ Animation complémentaire illustrant :
 
 ### En ligne (recommandé)
 Le projet est hébergé via **GitHub Pages** :
+**https://ms31800.github.io/Model_Rotor_SynRM/**
 
-👉 https://<ton-utilisateur>.github.io/<nom-du-depot>/
-
-### En local
-```bash
-git clone https://github.com/<ton-utilisateur>/<nom-du-depot>.git
-cd <nom-du-depot>
