@@ -2,24 +2,21 @@
 
 Ce dépôt propose un **ensemble d’animations interactives** dédiées à la compréhension des **machines synchrones à réluctance (SynRM)** et de leur **commande vectorielle (FOC – Field Oriented Control)**.
 
-L’objectif est de fournir un **support visuel rigoureux**, utilisable aussi bien en **enseignement**, en **auto-formation**, qu’en **ingénierie de conception / commande**.
-
 ### Animation du rotor SynRM – axes d/q, flux et couple
 Animation interactive montrant :
-
-    la **géométrie réelle du rotor SynRM** (barrières de flux),
-    la **détection automatique des axes d / q** à partir du SVG du rotor,
-    le **champ magnétique tournant** du stator,
-    le **flux magnétique anisotrope** (évitement des barrières),
-    le **couple de réluctance instantané** :
-      \[
+la géométrie réelle du rotor SynRM (barrières de flux),
+la détection automatique des axes d / q à partir du SVG du rotor,
+le champ magnétique tournant du stator, 
+le flux magnétique anisotrope (évitement des barrières),
+le couple de réluctance instantané :
+\[
       T \propto (L_d - L_q)\sin(2\delta)
       \]
 
  Points pédagogiques clés :
-- l’axe **d** correspond à la **perméabilité maximale**,
-- l’axe **q** est orthogonal et correspond à la **réluctance maximale**,
-- le décalage angulaire (≈ 45° ici) dépend **de la géométrie réelle du rotor**.
+    l’axe **d** correspond à la **perméabilité maximale**,
+    l’axe **q** est orthogonal et correspond à la **réluctance maximale**,
+    le décalage angulaire (≈ 45° ici) dépend **de la géométrie réelle du rotor**.
 
 
 ###  Animation FOC – commande vectorielle
@@ -34,10 +31,9 @@ Animation complémentaire illustrant :
 - la synchronisation champ / rotor.
 
  Cette animation fait le lien entre :
-- **la physique du moteur**,  
-- **la géométrie rotorique**,  
-- **la commande numérique (FOC)**.
-
+  **la physique du moteur**,  
+  **la géométrie rotorique**,  
+  **la commande numérique (FOC)**.
 
 ##  Objectifs pédagogiques
 
@@ -65,13 +61,13 @@ C'est un paramètre numérique contrôlant la vitesse de convergence du rotor ve
 Il représente de manière qualitative l’effet combiné du couple de réluctance et de l’inertie mécanique, sans modélisation dynamique complète.
 Effet concret du curseur
 
-## Gain faible  
+  ## Gain faible  
     Le rotor met du temps à s’aligner 
     δ reste plus grand 
     Animation douce, lente 
     Analogie : rotor lourd / faible couple
     
-## Gain élevé
+##   Gain élevé
     Le rotor “colle” rapidement au champ
     δ devient très petit
     Réponse rapide
