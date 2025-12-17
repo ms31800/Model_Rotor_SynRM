@@ -7,14 +7,14 @@ L’objectif est de fournir un **support visuel rigoureux**, utilisable aussi bi
 ### Animation du rotor SynRM – axes d/q, flux et couple
 Animation interactive montrant :
 
-- la **géométrie réelle du rotor SynRM** (barrières de flux),
-- la **détection automatique des axes d / q** à partir du SVG du rotor,
-- le **champ magnétique tournant** du stator,
-- le **flux magnétique anisotrope** (évitement des barrières),
-- le **couple de réluctance instantané** :
-  \[
-  T \propto (L_d - L_q)\sin(2\delta)
-  \]
+    la **géométrie réelle du rotor SynRM** (barrières de flux),
+    la **détection automatique des axes d / q** à partir du SVG du rotor,
+    le **champ magnétique tournant** du stator,
+    le **flux magnétique anisotrope** (évitement des barrières),
+    le **couple de réluctance instantané** :
+      \[
+      T \propto (L_d - L_q)\sin(2\delta)
+      \]
 
  Points pédagogiques clés :
 - l’axe **d** correspond à la **perméabilité maximale**,
@@ -41,22 +41,22 @@ Animation complémentaire illustrant :
 
 ##  Objectifs pédagogiques
 
-- Comprendre **le couple de réluctance** sans aimants ni courant rotor
-- Visualiser la notion d’**anisotropie magnétique**
-- Relier :
-  - géométrie du rotor,
-  - axes d/q,
-  - champ statorique,
-  - loi de couple
-- Démystifier la **commande FOC** appliquée aux SynRM
+Comprendre **le couple de réluctance** sans aimants ni courant rotor
+Visualiser la notion d’**anisotropie magnétique**
+  Relier :
+    géométrie du rotor,
+    axes d/q,
+    champ statorique,
+    loi de couple
+    Démystifier la **commande FOC** appliquée aux SynRM
 
 ##  Technologies utilisées
 
-- **HTML / JavaScript**
-- **p5.js**
-- **SVG** (géométrie du rotor) importé dans le html pour alléger le code
-- Calculs vectoriels temps réel
-- Aucune dépendance serveur
+    **HTML / JavaScript**
+    **p5.js**
+    **SVG** (géométrie du rotor) importé dans le html pour alléger le code
+    Calculs vectoriels temps réel
+    Aucune dépendance serveur
 
 ## Utilisation de l'application en mode non synchrone
 
@@ -70,8 +70,8 @@ Effet concret du curseur
     δ reste plus grand 
     Animation douce, lente 
     Analogie : rotor lourd / faible couple
+    
 ## Gain élevé
-    Gain élevé
     Le rotor “colle” rapidement au champ
     δ devient très petit
     Réponse rapide
