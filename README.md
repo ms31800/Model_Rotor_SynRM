@@ -19,7 +19,7 @@ Ce dépôt propose un **ensemble d’animations interactives** dédiées à la c
 - le décalage angulaire (≈ 45° ici) dépend **de la géométrie réelle du rotor**.
 
 ###  Animation FOC – commande vectorielle
-Animation complémentaire illustrant :
+Animation complémentaire: https://ms31800.github.io/FOC-SynRM-Explorer/
 
  Cette animation fait le lien entre :
 - la physique du moteur,  
