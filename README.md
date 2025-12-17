@@ -30,9 +30,9 @@ Animation complémentaire illustrant :
 - la synchronisation champ / rotor.
 
  Cette animation fait le lien entre :
-  **la physique du moteur**,  
-  **la géométrie rotorique**,  
-  **la commande numérique (FOC)**.
+- la physique du moteur,  
+- la géométrie rotorique,  
+- la commande numérique (FOC).
 
 ##  Objectifs pédagogiques
 
