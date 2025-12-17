@@ -21,14 +21,6 @@ Ce dépôt propose un **ensemble d’animations interactives** dédiées à la c
 ###  Animation FOC – commande vectorielle
 Animation complémentaire illustrant :
 
-- les courants triphasés,
-- la transformation **Clarke / Park**,
-- les axes **d / q tournants**,
-- la régulation indépendante :
-  - flux (axe d),
-  - couple (axe q),
-- la synchronisation champ / rotor.
-
  Cette animation fait le lien entre :
 - la physique du moteur,  
 - la géométrie rotorique,  
