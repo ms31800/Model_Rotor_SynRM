@@ -9,9 +9,7 @@ Ce dépôt propose un **ensemble d’animations interactives** dédiées à la c
 - le champ magnétique tournant du stator, 
 - le flux magnétique anisotrope (évitement des barrières),
 - le couple de réluctance instantané :
-- \[
-      T \propto (L_d - L_q)\sin(2\delta)
-      \]
+- T∝(Ld​−Lq​)sin(2δ)
 
  Points pédagogiques clés :
 - l’axe **d** correspond à la **perméabilité maximale**,
