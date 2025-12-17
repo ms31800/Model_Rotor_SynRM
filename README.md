@@ -4,7 +4,6 @@ Ce dépôt propose un **ensemble d’animations interactives** dédiées à la c
 
 L’objectif est de fournir un **support visuel rigoureux**, utilisable aussi bien en **enseignement**, en **auto-formation**, qu’en **ingénierie de conception / commande**.
 
-
 ### Animation du rotor SynRM – axes d/q, flux et couple
 Animation interactive montrant :
 
@@ -51,17 +50,19 @@ Animation complémentaire illustrant :
   - loi de couple
 - Démystifier la **commande FOC** appliquée aux SynRM
 
-
 ##  Technologies utilisées
 
 - **HTML / JavaScript**
 - **p5.js**
-- **SVG** (géométrie du rotor)
+- **SVG** (géométrie du rotor) importé dans le html pour alléger le code
 - Calculs vectoriels temps réel
 - Aucune dépendance serveur
 
+## Utilisation de l'application en mode non synchrone
 
-##  Utilisation
+## Gain d’alignement## : il règle la “force” avec laquelle le rotor rattrape le champ statorique dans l’animation.
+C'est un paramètre numérique contrôlant la vitesse de convergence du rotor vers l’axe d du champ statorique.
+Il représente de manière qualitative l’effet combiné du couple de réluctance et de l’inertie mécanique, sans modélisation dynamique complète.
 
 ### En ligne (recommandé)
 Le projet est hébergé via **GitHub Pages** :
