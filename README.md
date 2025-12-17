@@ -3,13 +3,13 @@
 Ce dépôt propose un **ensemble d’animations interactives** dédiées à la compréhension des **machines synchrones à réluctance (SynRM)** et de leur **commande vectorielle (FOC – Field Oriented Control)**.
 
 ### Animation du rotor SynRM – axes d/q, flux et couple
-Animation interactive montrant :
-la géométrie réelle du rotor SynRM (barrières de flux),
-la détection automatique des axes d / q à partir du SVG du rotor,
-le champ magnétique tournant du stator, 
-le flux magnétique anisotrope (évitement des barrières),
-le couple de réluctance instantané :
-\[
+- Animation interactive montrant :
+- la géométrie réelle du rotor SynRM (barrières de flux),
+- la détection automatique des axes d / q à partir du SVG du rotor,
+- le champ magnétique tournant du stator, 
+- le flux magnétique anisotrope (évitement des barrières),
+- le couple de réluctance instantané :
+- \[
       T \propto (L_d - L_q)\sin(2\delta)
       \]
 
