@@ -14,9 +14,9 @@ Ce dépôt propose un **ensemble d’animations interactives** dédiées à la c
       \]
 
  Points pédagogiques clés :
-    l’axe **d** correspond à la **perméabilité maximale**,
-    l’axe **q** est orthogonal et correspond à la **réluctance maximale**,
-    le décalage angulaire (≈ 45° ici) dépend **de la géométrie réelle du rotor**.
+- l’axe **d** correspond à la **perméabilité maximale**,
+- l’axe **q** est orthogonal et correspond à la **réluctance maximale**,
+- le décalage angulaire (≈ 45° ici) dépend **de la géométrie réelle du rotor**.
 
 ###  Animation FOC – commande vectorielle
 Animation complémentaire illustrant :
