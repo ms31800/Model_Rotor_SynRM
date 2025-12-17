@@ -55,19 +55,25 @@ Visualiser la notion d’**anisotropie magnétique**
     Aucune dépendance serveur
 
 ## Utilisation de l'application en mode non synchrone
+le rotor est piloté uniquement par la loi d’alignement et le gain joue pleinement son rôle
 
-## Gain d’alignement : il règle la “force” avec laquelle le rotor rattrape le champ statorique dans l’animation.
+On observe :
+- le retard angulaire,
+- l’oscillation éventuelle,
+- la convergence progressive
+
+## Gain d’alignement :
+Il règle la “force” avec laquelle le rotor rattrape le champ statorique dans l’animation.
 C'est un paramètre numérique contrôlant la vitesse de convergence du rotor vers l’axe d du champ statorique.
 Il représente de manière qualitative l’effet combiné du couple de réluctance et de l’inertie mécanique, sans modélisation dynamique complète.
 Effet concret du curseur
-
-  ## Gain faible  
+- Gain faible:  
     Le rotor met du temps à s’aligner 
     δ reste plus grand 
     Animation douce, lente 
     Analogie : rotor lourd / faible couple
-    
-##   Gain élevé
+  
+- Gain élevé:
     Le rotor “colle” rapidement au champ
     δ devient très petit
     Réponse rapide
