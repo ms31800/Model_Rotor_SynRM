@@ -78,7 +78,7 @@ Effet concret du curseur
   - Réponse rapide
   - Peut devenir un peu “nerveux” si trop élevé
   - Analogie : rotor léger / couple élevé
-  - Le rotor “colle” rapidement au champ
+  
 
 ### En ligne (recommandé)
 Le projet est hébergé via **GitHub Pages** :
