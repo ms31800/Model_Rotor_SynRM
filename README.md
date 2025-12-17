@@ -18,7 +18,6 @@ Ce dépôt propose un **ensemble d’animations interactives** dédiées à la c
     l’axe **q** est orthogonal et correspond à la **réluctance maximale**,
     le décalage angulaire (≈ 45° ici) dépend **de la géométrie réelle du rotor**.
 
-
 ###  Animation FOC – commande vectorielle
 Animation complémentaire illustrant :
 
@@ -68,18 +67,18 @@ C'est un paramètre numérique contrôlant la vitesse de convergence du rotor ve
 Il représente de manière qualitative l’effet combiné du couple de réluctance et de l’inertie mécanique, sans modélisation dynamique complète.
 Effet concret du curseur
 - Gain faible:  
-    Le rotor met du temps à s’aligner 
-    δ reste plus grand 
-    Animation douce, lente 
-    Analogie : rotor lourd / faible couple
+  - Le rotor met du temps à s’aligner 
+  - δ reste plus grand 
+  - Animation douce, lente 
+  - Analogie : rotor lourd / faible couple
   
 - Gain élevé:
-    Le rotor “colle” rapidement au champ
-    δ devient très petit
-    Réponse rapide
-    Peut devenir un peu “nerveux” si trop élevé
-    Analogie : rotor léger / couple élevé
-    Le rotor “colle” rapidement au champ
+  - Le rotor “colle” rapidement au champ
+  - δ devient très petit
+  - Réponse rapide
+  - Peut devenir un peu “nerveux” si trop élevé
+  - Analogie : rotor léger / couple élevé
+  - Le rotor “colle” rapidement au champ
 
 ### En ligne (recommandé)
 Le projet est hébergé via **GitHub Pages** :
