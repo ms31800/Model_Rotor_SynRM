@@ -3,18 +3,35 @@
 Ce dépôt propose un **ensemble d’animations interactives** dédiées à la compréhension des **machines synchrones à réluctance (SynRM)** et de leur **commande vectorielle (FOC – Field Oriented Control)**.
 
 ### Animation du rotor SynRM – axes d/q, flux et couple
-- Animation interactive montrant :
-- la géométrie réelle du rotor SynRM (barrières de flux),
-- la détection automatique des axes d / q à partir du SVG du rotor,
-- le champ magnétique tournant du stator, 
-- le flux magnétique anisotrope (évitement des barrières),
-- le couple de réluctance instantané :
+
+Ce que l’animation montre (et cache volontairement)
+Ce qu’elle montre bien
+
+- Direction préférentielle du flux
+- Anisotropie claire
+- Alignement rotor / champ
+- Naissance du couple
+
+Ce qu’elle lisse volontairement
+
+- Saturation locale
+- Franges de champ complexes
+- Effets transitoires rapides
+- Harmoniques spatiales
+
+  
+
 
 
  Points pédagogiques clés :
 - l’axe **d** correspond à la **perméabilité maximale**,
 - l’axe **q** est orthogonal et correspond à la **réluctance maximale**,
 - le décalage angulaire (≈ 45° ici) dépend **de la géométrie réelle du rotor**.
+
+### Animation du rotor SynRM 
+En ligne (recommandé)Le projet est hébergé via GitHub Pages :
+
+https://ms31800.github.io/Model_Rotor_SynRM/
 
 ###  Animation FOC – commande vectorielle
 Animation complémentaire: https://ms31800.github.io/FOC-SynRM-Explorer/
@@ -33,6 +50,11 @@ Visualiser la notion d’**anisotropie magnétique**
    - axes d/q,
    - champ statorique,
    - loi de couple
+
+## Quelques précisions sur le comportement de l'animation
+- le champ magnétique n’impose pas une direction rigide,
+- il impose une excitation magnétisante,et le flux résultant est celui qui minimise l’énergie magnétique totale.
+- Le flux se comporte comme un ballon qui roulerait sur un  terrain valloné: il glisse en douceur vers le point bas à chaque instant.
    
 ##  Technologies utilisées
 
@@ -76,7 +98,6 @@ Dans un moteur à réluctance synchrone :
 C’est ce phénomène, appelé anisotropie magnétique, qui permet la production de couple.
 - Le couple produit augmente avec l'anisotropie: T∝(Ld​−Lq​)sin(2δ)
 
-### En ligne (recommandé)
-Le projet est hébergé via **GitHub Pages** :
-**https://ms31800.github.io/Model_Rotor_SynRM/**
+
+
 
