@@ -9,7 +9,7 @@ Ce dépôt propose un **ensemble d’animations interactives** dédiées à la c
 - le champ magnétique tournant du stator, 
 - le flux magnétique anisotrope (évitement des barrières),
 - le couple de réluctance instantané :
-- T∝(Ld​−Lq​)sin(2δ)
+
 
  Points pédagogiques clés :
 - l’axe **d** correspond à la **perméabilité maximale**,
@@ -29,12 +29,11 @@ Animation complémentaire: https://ms31800.github.io/FOC-SynRM-Explorer/
 Comprendre **le couple de réluctance** sans aimants ni courant rotor
 Visualiser la notion d’**anisotropie magnétique**
   Relier :
-    géométrie du rotor,
-    axes d/q,
-    champ statorique,
-    loi de couple
-    Démystifier la **commande FOC** appliquée aux SynRM
-
+   - géométrie du rotor,
+   - axes d/q,
+   - champ statorique,
+   - loi de couple
+   
 ##  Technologies utilisées
 
     **HTML / JavaScript**
@@ -43,7 +42,7 @@ Visualiser la notion d’**anisotropie magnétique**
     Calculs vectoriels temps réel
     Aucune dépendance serveur
 
-## Utilisation de l'application en mode non synchrone
+## Le gain d'alignement et l'action sur Ld/Lq ne sont visibles qu'en mode non synchrone
 le rotor est piloté uniquement par la loi d’alignement et le gain joue pleinement son rôle
 
 On observe :
@@ -68,7 +67,14 @@ Effet concret du curseur
   - Réponse rapide
   - Peut devenir un peu “nerveux” si trop élevé
   - Analogie : rotor léger / couple élevé
-  
+ 
+ ## Anisotropie magnétique
+Ld et Lq sont les inductances vues par le champ statorique selon deux axes orthogonaux du rotor.
+Dans un moteur à réluctance synchrone :
+- Ld > Lq à cause des barrières de flux
+- le rotor s’aligne naturellement pour minimiser la réluctance
+C’est ce phénomène, appelé anisotropie magnétique, qui permet la production de couple.
+- Le couple produit augmente avec l'anisotropie: T∝(Ld​−Lq​)sin(2δ)
 
 ### En ligne (recommandé)
 Le projet est hébergé via **GitHub Pages** :
