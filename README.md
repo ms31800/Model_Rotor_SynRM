@@ -34,7 +34,7 @@ En ligne (recommandé)Le projet est hébergé via GitHub Pages :
 https://ms31800.github.io/Model_Rotor_SynRM/
 
 ###  Animation FOC – commande vectorielle
-Animation complémentaire: https://ms31800.github.io/FOC-SynRM-Explorer/
+https://ms31800.github.io/FOC-SynRM-Explorer/ (animation complémentaire)
 
  Cette animation fait le lien entre :
 - la physique du moteur,  
