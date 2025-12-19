@@ -19,14 +19,17 @@ Ce qu’elle lisse volontairement
 - Effets transitoires rapides
 - Harmoniques spatiales
 
-  
-
-
-
- Points pédagogiques clés :
+   Points pédagogiques :
 - l’axe **d** correspond à la **perméabilité maximale**,
 - l’axe **q** est orthogonal et correspond à la **réluctance maximale**,
 - le décalage angulaire (≈ 45° ici) dépend **de la géométrie réelle du rotor**.
+
+## Mode synchrone ON
+≈ moteur déjà accroché au réseau / FOC verrouillé
+
+## Mode synchrone OFF
+≈ phase d’accrochage, démarrage, transitoire
+
 
 ### Animation du rotor SynRM 
 En ligne (recommandé)Le projet est hébergé via GitHub Pages :
