@@ -24,7 +24,7 @@ Ce qu’elle lisse volontairement
 - l’axe **q** est orthogonal et correspond à la **réluctance maximale**,
 - le décalage angulaire (≈ 45° ici) dépend **de la géométrie réelle du rotor**.
 
-## Mode de fonctionnements 
+## Modes de fonctionnement
 - synchrone ON
 ≈ moteur déjà accroché au réseau / FOC verrouillé
 
